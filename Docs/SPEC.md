@@ -1,7 +1,3 @@
-We will now produce the **Gesso Visual Art Specification**, a deterministic, declarative language for capturing artistic intent in painting, digital art, and physical fabrication. The name **Gesso** refers to the traditional primer that prepares a surface for painting—just as this language prepares artistic intent for faithful rendering across any medium.
-
----
-
 # Gesso Visual Art Specification – Version 1.0.0
 
 **Status:** Normative / Draft  
