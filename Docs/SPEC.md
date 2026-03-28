@@ -728,4 +728,79 @@ As Gesso implementations scale, the codebase expands beyond the limits of standa
 
 ---
 
-This completes the Gesso Visual Art Specification with its foundational addenda. The language is now ready for implementation and adoption as a deterministic, AI‑native, human‑readable format for capturing artistic intent.
+
+
+# Addendum I: Realizer Fragmentation & Storage Optimization
+
+**Version:** 1.0 (Extension to Gesso 1.0.0)  
+**Status:** Normative / Final  
+**Scope:** Conformance Certification, Physical Approximation, Macro‑Normalization, and Data Availability Layers.
+
+---
+
+## I.1 Architectural Philosophy
+
+Gesso’s determinism guarantee is often challenged by two realities: (1) physical realizers (robot arms, CNC mills) cannot achieve bit‑identical results, and (2) on‑chain storage costs favor minimal footprint. This addendum codifies how Gesso maintains provenance and efficiency across these real‑world constraints without compromising the core principle of *intent preservation*.
+
+---
+
+## I.2 The Fragmentation Problem: Conformance Profiles & The Mathematical Ideal
+
+### I.2.1 Bit‑Identical Certification (Digital Profiles)
+
+For digital outputs (Profiles A and C), the compiler **MUST** produce bit‑identical results across all compliant realizers. A **Universal Conformance Suite (UCS)** is maintained, containing a set of reference `.gesso` files and their expected rendering results (PNG, WebGL frame buffers). Any realizer claiming Profile A or C conformance **MUST** pass the UCS.
+
+### I.2.2 Physical Realization (Profile VDP)
+
+When the target is a physical device (e.g., a robotic painting arm, CNC router), the Gesso source defines a **Mathematical Ideal** – the exact geometry, material application, and color mixing that the artist intended. The `Visual Delegation Protocol (VDP)` layer is responsible for generating machine‑specific toolpaths and calibration commands.
+
+- **Mechanical Approximation:** Physical variance (e.g., brush bristle wear, motor backlash, canvas texture) is treated as a *medium‑specific artifact*, not a violation of the intent.
+- **Provenance Link:** The final physical output is accompanied by a cryptographic hash of the source Gesso file and the VDP parameter set, ensuring a verifiable chain of custody.
+
+---
+
+## I.3 Storage & Gas Optimization
+
+### I.3.1 Macro‑Normalization (Structural Compression)
+
+Gesso source files are already compact (2–10 KB for complex works), but on‑chain storage demands further minimization. The compiler supports **macro‑normalization**, an LZ77‑style extraction of repetitive patterns.
+
+- **Syntax:** Any geometric or stylistic pattern can be defined once in a `$macro` block and referenced multiple times.
+- **Behavior:** During compilation for blockchain deployment, the `--optimize macro` flag instructs the parser to replace repeated structures with macro calls. The on‑chain AST stores the normalized form; expansion happens at realization time.
+
+**Example:**
+```gesso
+$macro impasto_stroke(pos, color) {
+  circle pos: pos, radius: 12px, fill: color,
+  stroke: black, stroke_width: 2px,
+  control: pressure = [0.8, 0.3]
+}
+
+layer "Field" {
+  $impasto_stroke([100,200], #FFAA33)
+  $impasto_stroke([300,150], #FF8844)
+  $impasto_stroke([500,250], #FFAA33)
+}
+```
+
+### I.3.2 Targeting Data Availability (DA) Layers
+
+Given the post‑EIP‑4844 landscape, Gesso assets are designed for **L2/L3 rollups** where the cost of storing a kilobyte‑sized AST is negligible compared to the value of the art. The compiler can optionally split the source into a **stateful root** (the immutable core) and a **data‑availability blob** (full source) using standard `blob` transactions.
+
+- **Root Contract:** Stores only the hash of the full source and a small set of mutable parameters (e.g., ownership, licensing).
+- **Blob Storage:** The full Gesso source is stored as a blob on the rollup’s data availability layer, retrievable by the hash.
+
+This approach decouples state growth from the artwork’s presence, aligning with modern blockchain scalability.
+
+---
+
+## I.4 Normative Requirements
+
+1. **Conformance Suite:** Every software realizer claiming Profile A or C conformance **MUST** include the UCS and document any deviations.
+2. **VDP Documentation:** Any physical realizer implementing the Visual Delegation Protocol **MUST** document its approximation tolerances and provide a method to hash‑link the final output to the source.
+3. **Macro Expansion:** The core compiler **MUST** support macro‑normalization and provide a flag to output the expanded source for verification.
+4. **DA‑Aware Compilation:** The compiler **MAY** support `--target da` to generate a bundle suitable for L2 blob storage.
+
+---
+
+This addendum ensures that Gesso remains both practically implementable and philosophically coherent, addressing the two most cited concerns about deterministic visual languages in the generative era.
